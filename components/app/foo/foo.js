@@ -9,7 +9,7 @@ define(['jquery'], function($) {
     },
 
     bar: function () {
-      return "rab";
+      return "bar";
     }
 
   };
