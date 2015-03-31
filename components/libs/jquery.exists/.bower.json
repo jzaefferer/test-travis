@@ -1,0 +1,26 @@
+{
+  "name": "jquery.exists",
+  "version": "1.0.0",
+  "homepage": "https://github.com/markusfalk/exists",
+  "authors": [
+    "Markus Falk <mail@markus-falk.com>"
+  ],
+  "description": "jQuery Plugin for checking wether an element exists and if it does run some code",
+  "main": "jquery.exists.js",
+  "license": "MIT",
+  "ignore": [
+    "*.md"
+  ],
+  "dependencies": {
+    "jquery": ">1.7.0"
+  },
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "85608f4979890bb5b56ea8c437fd503bcc1471ee"
+  },
+  "_source": "git://github.com/markusfalk/jquery.exists.git",
+  "_target": "~1",
+  "_originalSource": "jquery.exists"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "travis-ci-test",
+  "version": "0",
+  "main": "sandbox.html",
+  "dependencies": {
+    "modernizr-shim": "~0.0.1",
+    "jquery.exists": "~1",
+    "requirejs": "~2",
+    "qunit": "~1.17.1"
+  }
+}
