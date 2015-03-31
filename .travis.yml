@@ -1,5 +1,5 @@
 language: node_js
-before_install: npm install -g grunt-cli && gem install compass
+before_install: npm install -g grunt-cli && gem install compass && gem install --pre sass-css-importer
 install: npm install
 before_script: grunt
 script: grunt qunit
