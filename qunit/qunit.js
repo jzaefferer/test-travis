@@ -2,8 +2,10 @@ require.config({
     baseUrl: "../",
     paths: {
       'jquery': 'components/libs/jquery/dist/jquery.min',
-      'test-Foo': 'components/app/foo/test-Foo',
-      'foo': 'components/app/foo/foo'
+
+      // Test for Foo
+      'foo': 'components/app/foo/foo',
+      'test-Foo': 'components/app/foo/test-Foo'
     },
     shim: {
      'QUnit': {
