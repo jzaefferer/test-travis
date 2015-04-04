@@ -29,6 +29,7 @@ if ( typeof window !== "undefined" ) {
 				"start",
 				"stop",
 				"ok",
+				"notOk",
 				"equal",
 				"notEqual",
 				"propEqual",
@@ -59,4 +60,11 @@ if ( typeof module !== "undefined" && module && module.exports ) {
 // For CommonJS with exports, but without module.exports, like Rhino
 if ( typeof exports !== "undefined" && exports ) {
 	exports.QUnit = QUnit;
+}
+
+if ( typeof define === "function" && define.amd ) {
+	define( function() {
+		return QUnit;
+	} );
+	QUnit.config.autostart = false;
 }

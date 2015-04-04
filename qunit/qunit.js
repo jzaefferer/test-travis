@@ -1,6 +1,7 @@
 require.config({
     baseUrl: "../",
     paths: {
+      'QUnit': 'components/libs/qunit/qunit/qunit',
       'jquery': 'components/libs/jquery/dist/jquery.min',
 
       // Test for Foo
@@ -9,16 +10,16 @@ require.config({
     },
     shim: {
      'QUnit': {
-        exports: 'QUnit'
+       exports: 'QUnit',
+       init: function() {
+         QUnit.config.autoload = false;
+         QUnit.config.autostart = false;
+       }
       }
     }
 });
 
 require(['test-Foo'], function (Foo) {
-
-  Foo.startTests();
-
   QUnit.load();
   QUnit.start();
-
 });

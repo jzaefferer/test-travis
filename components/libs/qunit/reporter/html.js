@@ -118,7 +118,14 @@ function addEvent( elem, type, fn ) {
 	} else if ( elem.attachEvent ) {
 
 		// support: IE <9
-		elem.attachEvent( "on" + type, fn );
+		elem.attachEvent( "on" + type, function() {
+			var event = window.event;
+			if ( !event.target ) {
+				event.target = event.srcElement || document;
+			}
+
+			fn.call( elem, event );
+		});
 	}
 }
 
@@ -289,12 +296,16 @@ function setUrl( params ) {
 }
 
 function applyUrlParams() {
-	var selectBox = id( "qunit-modulefilter" ),
-		selection = decodeURIComponent( selectBox.options[ selectBox.selectedIndex ].value ),
+	var selectedModule,
+		modulesList = id( "qunit-modulefilter" ),
 		filter = id( "qunit-filter-input" ).value;
 
+	selectedModule = modulesList ?
+		decodeURIComponent( modulesList.options[ modulesList.selectedIndex ].value ) :
+		undefined;
+
 	window.location = setUrl({
-		module: ( selection === "" ) ? undefined : selection,
+		module: ( selectedModule === "" ) ? undefined : selectedModule,
 		filter: ( filter === "" ) ? undefined : filter,
 
 		// Remove testId filter
@@ -450,9 +461,14 @@ function storeFixture() {
 
 function appendUserAgent() {
 	var userAgent = id( "qunit-userAgent" );
+
 	if ( userAgent ) {
 		userAgent.innerHTML = "";
-		userAgent.appendChild( document.createTextNode( navigator.userAgent ) );
+		userAgent.appendChild(
+			document.createTextNode(
+				"QUnit " + QUnit.version  + "; " + navigator.userAgent
+			)
+		);
 	}
 }
 
@@ -595,7 +611,7 @@ function getNameHtml( name, module ) {
 }
 
 QUnit.testStart(function( details ) {
-	var running, testBlock;
+	var running, testBlock, bad;
 
 	testBlock = id( "qunit-test-output-" + details.testId );
 	if ( testBlock ) {
@@ -608,7 +624,13 @@ QUnit.testStart(function( details ) {
 
 	running = id( "qunit-testresult" );
 	if ( running ) {
-		running.innerHTML = "Running: <br />" + getNameHtml( details.name, details.module );
+		bad = QUnit.config.reorder && defined.sessionStorage &&
+			+sessionStorage.getItem( "qunit-test-" + details.module + "-" + details.name );
+
+		running.innerHTML = ( bad ?
+			"Rerunning previously failed test: <br />" :
+			"Running: <br />" ) +
+			getNameHtml( details.name, details.module );
 	}
 
 });
@@ -641,6 +663,15 @@ QUnit.log(function( details ) {
 				actual + "</pre></td></tr>" +
 				"<tr class='test-diff'><th>Diff: </th><td><pre>" +
 				QUnit.diff( expected, actual ) + "</pre></td></tr>";
+		} else {
+			if ( expected.indexOf( "[object Array]" ) !== -1 ||
+					expected.indexOf( "[object Object]" ) !== -1 ) {
+				message += "<tr class='test-message'><th>Message: </th><td>" +
+					"Diff suppressed as the depth of object is more than current max depth (" +
+					QUnit.config.maxDepth + ").<p>Hint: Use <code>QUnit.dump.maxDepth</code> to " +
+					" run with a higher max depth or <a href='" + setUrl({ maxDepth: -1 }) + "'>" +
+					"Rerun</a> without max depth.</p></td></tr>";
+			}
 		}
 
 		if ( details.source ) {
@@ -725,13 +756,15 @@ QUnit.testDone(function( details ) {
 	}
 });
 
-if ( !defined.document || document.readyState === "complete" ) {
+if ( defined.document ) {
+	if ( document.readyState === "complete" ) {
+		QUnit.load();
+	} else {
+		addEvent( window, "load", QUnit.load );
+	}
+} else {
 	config.pageLoaded = true;
 	config.autorun = true;
-}
-
-if ( defined.document ) {
-	addEvent( window, "load", QUnit.load );
 }
 
 })();

@@ -103,6 +103,9 @@ config = {
 	// when enabled, all tests must call expect()
 	requireExpects: false,
 
+	// depth up-to which object will be dumped
+	maxDepth: 5,
+
 	// add checkboxes that are persisted in the query-string
 	// when enabled, the id is set to `true` as a `QUnit.config` property
 	urlConfig: [
@@ -172,11 +175,17 @@ config.modules.push( config.currentModule );
 	// String search anywhere in moduleName+testName
 	config.filter = urlParams.filter;
 
+	if ( urlParams.maxDepth ) {
+		config.maxDepth = parseInt( urlParams.maxDepth, 10 ) === -1 ?
+			Number.POSITIVE_INFINITY :
+			urlParams.maxDepth;
+	}
+
 	config.testId = [];
 	if ( urlParams.testId ) {
 
 		// Ensure that urlParams.testId is an array
-		urlParams.testId = [].concat( urlParams.testId );
+		urlParams.testId = decodeURIComponent( urlParams.testId ).split( "," );
 		for ( i = 0; i < urlParams.testId.length; i++ ) {
 			config.testId.push( urlParams.testId[ i ] );
 		}
@@ -184,6 +193,9 @@ config.modules.push( config.currentModule );
 
 	// Figure out if we're running the tests from a server or not
 	QUnit.isLocal = location.protocol === "file:";
+
+	// Expose the current QUnit version
+	QUnit.version = "@VERSION";
 }());
 
 // Root QUnit object.
@@ -471,20 +483,14 @@ function done() {
 	});
 }
 
-// Doesn't support IE6 to IE9
+// Doesn't support IE6 to IE9, it will return undefined on these browsers
 // See also https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error/Stack
 function extractStacktrace( e, offset ) {
 	offset = offset === undefined ? 4 : offset;
 
 	var stack, include, i;
 
-	if ( e.stacktrace ) {
-
-		// Opera 12.x
-		return e.stacktrace.split( "\n" )[ offset + 3 ];
-	} else if ( e.stack ) {
-
-		// Firefox, Chrome, Safari 6+, IE10+, PhantomJS and Node
+	if ( e.stack ) {
 		stack = e.stack.split( "\n" );
 		if ( /^error$/i.test( stack[ 0 ] ) ) {
 			stack.shift();
@@ -502,9 +508,10 @@ function extractStacktrace( e, offset ) {
 			}
 		}
 		return stack[ offset ];
+
+	// Support: Safari <=6 only
 	} else if ( e.sourceURL ) {
 
-		// Safari < 6
 		// exclude useless self-reference for generated Error objects
 		if ( /qunit.js$/.test( e.sourceURL ) ) {
 			return;
@@ -516,16 +523,19 @@ function extractStacktrace( e, offset ) {
 }
 
 function sourceFromStacktrace( offset ) {
-	var e = new Error();
-	if ( !e.stack ) {
+	var error = new Error();
+
+	// Support: Safari <=7 only, IE <=10 - 11 only
+	// Not all browsers generate the `stack` property for `new Error()`, see also #636
+	if ( !error.stack ) {
 		try {
-			throw e;
+			throw error;
 		} catch ( err ) {
-			// This should already be true in most browsers
-			e = err;
+			error = err;
 		}
 	}
-	return extractStacktrace( e, offset );
+
+	return extractStacktrace( error, offset );
 }
 
 function synchronize( callback, last ) {

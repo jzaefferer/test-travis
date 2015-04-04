@@ -10,12 +10,17 @@ define(['jquery'], function($) {
 
     bar: function () {
       return "bar";
+    },
+
+    oof: function() {
+      return "oof";
     }
 
   };
 
   return {
     foo: Foo.foo,
+    oof: Foo.oof,
     bar: Foo.bar
   };
 

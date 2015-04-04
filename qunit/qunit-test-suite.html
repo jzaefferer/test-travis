@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <title>QUnit Tests Suite: travis CI Test</title>
+
   <link rel="stylesheet" href="../components/libs/qunit/qunit/qunit.css">
+
+  <script src="../components/libs/qunit/qunit/qunit.js"></script>
+
+  <script>
+    QUnit.config.autoload = false;
+    QUnit.config.autostart = false;
+  </script>
+
+  <script data-main="qunit" src="../components/libs/requirejs/require.js"></script>
+
 </head>
 <body>
 
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
-
-  <script src="../components/libs/qunit/qunit/qunit.js"></script>
-  <script>
-    QUnit.config.autostart = false;
-  </script>
-
-  <script data-main="qunit" src="../components/libs/requirejs/require.js"></script>
 
 </body>
 </html>

@@ -218,7 +218,23 @@ module.exports = function(grunt) {
     },
 
     qunit: {
-      all: ['qunit/qunit-test-suite.html']
+      foo: ['qunit/qunit-test-suite.html'],
+      all: {
+        options: {
+          urls: [
+            'http://localhost:8000/qunit/qunit-test-suite.html'
+          ]
+        }
+      }
+    },
+
+    connect: {
+      server: {
+        options: {
+          port: 8000,
+          base: '.'
+        }
+      }
     },
 
     sync: {
@@ -269,6 +285,29 @@ module.exports = function(grunt) {
           "src": ['components/app/**/*.js', 'build/**/*.css']
         }
       }
+    },
+
+    qunit_amd: {
+      unit: {
+          // include: [
+          //     'test/lib/helper.js',
+          //     'test/lib/sinon-1.5.1.js'
+          // ],
+          tests: [
+              "components/app/foo/test-Foo.js"
+          ],
+          require: {
+              baseUrl: './',
+              paths: {
+                'QUnit': 'components/libs/qunit/qunit/qunit',
+                'jquery': 'components/libs/jquery/dist/jquery.min',
+
+                // Test for Foo
+                'foo': 'components/app/foo/foo',
+                'test-Foo': 'components/app/foo/test-Foo'
+              }
+          }
+      }
     }
 
   });
@@ -287,6 +326,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-replace');
   grunt.loadNpmTasks('grunt-sync');
   grunt.loadNpmTasks('grunt-newer');
+  grunt.loadNpmTasks('grunt-qunit-amd');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
   grunt.registerTask('default', [
     'replace',
@@ -316,5 +357,7 @@ module.exports = function(grunt) {
     'clean',
     'modernizr'
    ]);
+
+   grunt.registerTask('test', ['connect', 'qunit:all']);
 
 };
