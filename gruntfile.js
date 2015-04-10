@@ -222,7 +222,7 @@ module.exports = function(grunt) {
       all: {
         options: {
           urls: [
-            'http://localhost:8000/qunit/qunit-test-suite.html'
+            'http://localhost:10000/qunit/qunit-test-suite.html'
           ]
         }
       }
@@ -231,7 +231,7 @@ module.exports = function(grunt) {
     connect: {
       server: {
         options: {
-          port: 8000,
+          port: 10000,
           base: '.'
         }
       }
