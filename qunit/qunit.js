@@ -6,7 +6,7 @@ require.config({
 
       // Test for Foo
       'foo': 'components/app/foo/foo',
-      'test-Foo': 'components/app/foo/test-Foo'
+      'test-foo': 'components/app/foo/test-foo'
     },
     shim: {
      'QUnit': {
@@ -19,7 +19,7 @@ require.config({
     }
 });
 
-require(['test-Foo'], function (Foo) {
+require(['test-foo'], function (Foo) {
   QUnit.load();
   QUnit.start();
 });
