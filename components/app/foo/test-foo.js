@@ -13,15 +13,4 @@ define(['foo'], function(Foo) {
     equal(Foo.bar(), "barz", "Function should return 'bar'");
   });
 
-  // asyncTest("Foo Test", function() {
-  //   expect(1);
-
-  //   $('#qunit-fixture').load('../components/app/foo/foo.html', function(data) {
-  //     Foo.init();
-  //     ok($('.Foo').hasClass('lorem'), ".Foo should have class 'lorem'");
-  //     QUnit.start();
-  //   });
-
-  // });
-
 });
