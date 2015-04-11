@@ -3,23 +3,7 @@
   "version": "0.0.0",
   "devDependencies": {
     "grunt": "^0.4",
-    "grunt-accessibility": "^2",
-    "grunt-contrib-clean": "^0.6",
-    "grunt-contrib-compass": "^1",
     "grunt-contrib-connect": "^0.10.1",
-    "grunt-contrib-copy": "^0.6",
-    "grunt-contrib-csslint": "^0.3",
-    "grunt-contrib-imagemin": "^0.8",
-    "grunt-contrib-jshint": "^0.10",
-    "grunt-contrib-qunit": "^0.7.0",
-    "grunt-contrib-requirejs": "^0.4",
-    "grunt-contrib-uglify": "^0.6",
-    "grunt-contrib-watch": "^0.6",
-    "grunt-modernizr": "^0.6",
-    "grunt-newer": "^1",
-    "grunt-qunit-amd": "^1.0.2",
-    "grunt-replace": "^0.8",
-    "grunt-sync": "0.2",
-    "jshint-stylish": "^1"
+    "grunt-contrib-qunit": "^0.7.0"
   }
 }
