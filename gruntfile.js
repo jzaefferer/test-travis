@@ -27,7 +27,9 @@ module.exports = function(grunt) {
 
 
   });
-
+grunt.event.on("qunit.*", function() {
+  console.log(arguments)
+})
 
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-contrib-connect');
